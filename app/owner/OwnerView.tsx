@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import SignOutButton from "@/components/SignOutButton";
+import TillPanel from "@/components/TillPanel";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { theme } from "@/lib/theme";
 import type { CardStatus, LoyaltySettings, Profile } from "@/lib/types";
@@ -18,6 +19,7 @@ export default function OwnerView() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [serving, setServing] = useState(false);
 
   const load = useCallback(async () => {
     const supabase = getBrowserClient();
@@ -169,6 +171,34 @@ export default function OwnerView() {
         </div>
       ) : (
         <>
+          <section>
+            {!serving ? (
+              <button
+                type="button"
+                onClick={() => setServing(true)}
+                className="w-full rounded-2xl bg-brand py-4 font-medium text-brand-on-primary shadow-sm"
+              >
+                Serve a customer
+              </button>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-semibold">Serve a customer</h2>
+                  <button
+                    type="button"
+                    onClick={() => setServing(false)}
+                    className="text-sm text-brand-muted underline underline-offset-2 hover:text-brand"
+                  >
+                    Close
+                  </button>
+                </div>
+                {/* Same scan + stamp flow as the staff till. Refreshes the
+                    dashboard counts whenever a stamp or redeem lands. */}
+                <TillPanel onStampChange={load} />
+              </div>
+            )}
+          </section>
+
           <section className="grid grid-cols-3 gap-3">
             {[
               { label: "Customers", value: customers.length },
@@ -264,42 +294,52 @@ export default function OwnerView() {
           </section>
 
           <section className={cardClasses}>
-            <h2 className="mb-4 font-semibold">Customers</h2>
+            <h2 className="mb-4 font-semibold">
+              Customers
+              {customers.length > 0 && (
+                <span className="ml-2 text-sm font-normal text-brand-muted">
+                  {customers.length}
+                </span>
+              )}
+            </h2>
             {customers.length === 0 ? (
               <p className="text-sm text-brand-muted">
                 No customers yet. They appear here after their first sign in.
               </p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead>
-                    <tr className="text-xs text-brand-muted">
-                      <th className="pb-2 pr-3 font-medium">Customer</th>
-                      <th className="pb-2 pr-3 font-medium">Card</th>
-                      <th className="pb-2 pr-3 font-medium">Lifetime</th>
-                      <th className="pb-2 font-medium">Redeemed</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {customers.map((c) => (
-                      <tr
-                        key={c.customer_id}
-                        className="border-t border-brand-accent/15"
-                      >
-                        <td className="py-2.5 pr-3">
+              <ul className="flex flex-col gap-2">
+                {customers.map((c) => {
+                  const required = settings?.stamps_required ?? 0;
+                  const complete =
+                    required > 0 && c.stamps_on_card >= required;
+                  return (
+                    <li
+                      key={c.customer_id}
+                      className="rounded-2xl bg-brand-accent/10 px-4 py-3"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="min-w-0 truncate font-medium">
                           {c.display_name || c.email}
-                        </td>
-                        <td className="py-2.5 pr-3">
+                        </span>
+                        <span
+                          className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${
+                            complete
+                              ? "bg-brand-success text-brand-on-primary"
+                              : "bg-brand-surface text-brand-muted"
+                          }`}
+                        >
                           {c.stamps_on_card}
-                          {settings ? ` / ${settings.stamps_required}` : ""}
-                        </td>
-                        <td className="py-2.5 pr-3">{c.lifetime_stamps}</td>
-                        <td className="py-2.5">{c.rewards_redeemed}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          {required ? ` / ${required}` : ""}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-brand-muted">
+                        {c.lifetime_stamps} lifetime stamps,{" "}
+                        {c.rewards_redeemed} redeemed
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
             )}
           </section>
         </>

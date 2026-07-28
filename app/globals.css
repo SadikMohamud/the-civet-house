@@ -30,13 +30,16 @@ body {
   overscroll-behavior-y: none;
 }
 
-/* iOS zooms the viewport when focusing an input smaller than 16px.
-   Force a 16px minimum on form controls so the layout stays put. */
-input,
+/* iOS zooms the viewport when focusing a text field smaller than 16px.
+   Force a 16px minimum on text-entry controls so the layout stays put.
+   !important is deliberate: it has to beat Tailwind's text-sm utility.
+   Buttons are excluded so small text buttons keep their size. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not(
+    [type="submit"]
+  ),
 select,
-textarea,
-button {
-  font-size: max(16px, 1em);
+textarea {
+  font-size: max(16px, 1em) !important;
 }
 
 /* Comfortable, thumb-friendly minimum tap target. */
