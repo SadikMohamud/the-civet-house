@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- PLACEHOLDER logo for The Civet House. Replace with the real asset. -->
+  <rect width="512" height="512" rx="96" fill="#3E2C23"/>
+  <g fill="none" stroke="#C89B6B" stroke-width="22" stroke-linecap="round">
+    <path d="M150 220 h180 v110 a60 60 0 0 1 -60 60 h-60 a60 60 0 0 1 -60 -60 z"/>
+    <path d="M330 240 h30 a45 45 0 0 1 0 90 h-30"/>
+    <path d="M195 130 c0 25 20 25 20 50"/>
+    <path d="M245 130 c0 25 20 25 20 50"/>
+  </g>
+  <text x="256" y="465" text-anchor="middle" font-family="Georgia, serif" font-size="52" fill="#FAF6F1">The Civet House</text>
+</svg>

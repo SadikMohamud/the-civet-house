@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* Brand colours are injected as CSS variables on <html> by app/layout.tsx,
+   sourced from lib/theme.ts. Edit them there, not here. */
+@theme inline {
+  --color-brand: var(--brand-primary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-background: var(--brand-background);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-success: var(--brand-success);
+  --color-brand-on-primary: var(--brand-on-primary);
+  --font-sans: var(--font-geist-sans);
+}
+
+html {
+  /* Never scroll sideways on a phone. */
+  overflow-x: hidden;
+  /* Respect notches and rounded corners. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--brand-background);
+  color: var(--brand-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  /* Removes the grey flash when tapping buttons on mobile. */
+  -webkit-tap-highlight-color: transparent;
+  /* Stops the whole page rubber-banding vertically like a web page. */
+  overscroll-behavior-y: none;
+}
+
+/* iOS zooms the viewport when focusing an input smaller than 16px.
+   Force a 16px minimum on form controls so the layout stays put. */
+input,
+select,
+textarea,
+button {
+  font-size: max(16px, 1em);
+}
+
+/* Comfortable, thumb-friendly minimum tap target. */
+button,
+a[role="button"],
+input[type="submit"] {
+  touch-action: manipulation;
+}
