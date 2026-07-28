@@ -105,70 +105,84 @@ export default function CardView({ userId }: CardViewProps) {
         </div>
       ) : (
         <>
-          <section className="rounded-3xl bg-brand-surface p-6 shadow-sm">
-            <div className="mb-5 text-center">
-              {editingName ? (
-                <form onSubmit={saveName} className="flex justify-center gap-2">
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    className="rounded-lg border border-brand-accent/40 px-3 py-1.5 text-sm outline-none focus:border-brand-accent"
-                    autoFocus
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-lg bg-brand px-3 py-1.5 text-sm text-brand-on-primary"
-                  >
-                    Save
-                  </button>
-                </form>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setEditingName(true)}
-                  className="text-sm text-brand-muted underline-offset-2 hover:underline"
-                >
-                  {status?.display_name
-                    ? `Hello, ${status.display_name}`
-                    : "Add your name"}
-                </button>
-              )}
+          <section className="card-premium animate-rise rounded-3xl p-6 shadow-lg">
+            <div className="relative z-10">
+              <div className="mb-5 flex items-start justify-between">
+                <div>
+                  <p className="text-[0.7rem] uppercase tracking-[0.2em] text-brand-on-primary/60">
+                    {theme.shopName}
+                  </p>
+                  {editingName ? (
+                    <form
+                      onSubmit={saveName}
+                      className="mt-1 flex gap-2"
+                    >
+                      <input
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Your name"
+                        className="w-32 rounded-lg border border-white/30 bg-white/10 px-2 py-1 text-brand-on-primary placeholder:text-brand-on-primary/50 outline-none"
+                        autoFocus
+                      />
+                      <button
+                        type="submit"
+                        className="rounded-lg bg-brand-accent px-3 py-1 text-sm font-medium text-brand"
+                      >
+                        Save
+                      </button>
+                    </form>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setEditingName(true)}
+                      className="mt-0.5 text-lg font-semibold text-brand-on-primary"
+                    >
+                      {status?.display_name
+                        ? status.display_name
+                        : "Add your name"}
+                    </button>
+                  )}
+                </div>
+                <span className="rounded-full border border-brand-accent/50 px-2.5 py-1 text-[0.65rem] font-medium uppercase tracking-wider text-brand-accent">
+                  Member
+                </span>
+              </div>
+
+              <StampGrid earned={earned} required={required} tone="light" />
+
+              <p className="mt-5 text-center text-sm text-brand-on-primary/70">
+                {required === 0
+                  ? "Your card is being set up. Check back soon."
+                  : complete
+                    ? "Your card is full. Reward ready!"
+                    : `${remaining} more ${remaining === 1 ? "stamp" : "stamps"} until ${settings?.reward_description ?? "your reward"}`}
+              </p>
             </div>
-
-            <StampGrid earned={earned} required={required} />
-
-            <p className="mt-5 text-center text-sm text-brand-muted">
-              {required === 0
-                ? "The loyalty card is being set up. Check back soon."
-                : complete
-                  ? "Your card is complete!"
-                  : `${remaining} more ${remaining === 1 ? "stamp" : "stamps"} until your reward`}
-            </p>
           </section>
 
           {complete && settings && (
-            <section className="rounded-3xl bg-brand-success p-5 text-center text-brand-on-primary shadow-sm">
-              <p className="text-lg font-semibold">Reward unlocked</p>
-              <p className="mt-1 text-sm opacity-90">
-                {settings.reward_description}. Show this screen to a barista to
-                claim it.
-              </p>
+            <section className="animate-pop-in overflow-hidden rounded-3xl shadow-sm">
+              <div className="shimmer px-5 py-5 text-center text-brand">
+                <p className="text-lg font-semibold">Reward unlocked</p>
+                <p className="mt-1 text-sm font-medium">
+                  {settings.reward_description}. Show this screen to a barista.
+                </p>
+              </div>
             </section>
           )}
 
           {status && (
-            <section className="rounded-3xl bg-brand-surface p-6 text-center shadow-sm">
+            <section className="animate-rise rounded-3xl bg-brand-surface p-6 text-center shadow-sm">
               <p className="mb-4 text-sm text-brand-muted">
                 {complete
                   ? "Have this scanned to claim your reward"
-                  : "Have this scanned to collect a stamp"}
+                  : "Show this at the till to collect your stamp"}
               </p>
-              <div className="mx-auto w-fit rounded-2xl bg-white p-4">
+              <div className="mx-auto w-fit rounded-2xl bg-white p-4 shadow-inner">
                 <QRCode value={status.card_code} size={176} />
               </div>
               <p className="mt-3 text-xs text-brand-muted">
-                This code is unique to you
+                Unique to you &middot; one stamp per day
               </p>
             </section>
           )}
