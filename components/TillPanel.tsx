@@ -6,7 +6,7 @@ import StampGrid from "@/components/StampGrid";
 import { getBrowserClient } from "@/lib/supabase/client";
 import type { CardStatus, LoyaltySettings } from "@/lib/types";
 
-type ResultKind = "stamped" | "too_soon" | "complete" | "redeemed";
+type ResultKind = "stamped" | "complete" | "redeemed";
 
 interface Result {
   kind: ResultKind;
@@ -23,9 +23,10 @@ interface TillPanelProps {
   onStampChange?: () => void;
 }
 
-// Continuous scan-and-stamp till. The camera stays live; each scanned
-// customer is stamped automatically (once per day), with a result shown
-// for a moment before scanning resumes. A completed card offers redeem.
+// Scan-and-stamp till. Scanning a customer stamps them and pauses on a
+// result card. Staff can add more stamps for the same visit (buying for
+// friends), redeem a full card, or move on to the next customer. Pausing
+// on the result stops a lingering QR from stamping repeatedly on its own.
 export default function TillPanel({ onStampChange }: TillPanelProps) {
   const [settings, setSettings] = useState<LoyaltySettings | null>(null);
   const [paused, setPaused] = useState(false);
@@ -100,13 +101,15 @@ export default function TillPanel({ onStampChange }: TillPanelProps) {
         customerId,
       });
       onStampChange?.();
-      // Auto-resume for the routine outcomes; wait for staff when a
-      // reward is now claimable.
-      if (kind === "stamped" && !data.card_complete) scheduleResume(3200);
-      else if (kind === "too_soon") scheduleResume(3200);
+      // Deliberately no auto-resume: the result stays up so staff can add
+      // another stamp for the same visit, redeem, or move on by choice.
     },
-    [onStampChange, scheduleResume]
+    [onStampChange]
   );
+
+  const addAnother = useCallback(() => {
+    if (result) stamp(result.customerId, result.name);
+  }, [result, stamp]);
 
   const handleScan = useCallback(
     async (cardCode: string) => {
@@ -190,6 +193,7 @@ export default function TillPanel({ onStampChange }: TillPanelProps) {
             rewardText={rewardText}
             busy={busy}
             onRedeem={redeem}
+            onAddAnother={addAnother}
             onDone={resumeScanning}
           />
         ) : (
@@ -282,12 +286,14 @@ function ResultCard({
   rewardText,
   busy,
   onRedeem,
+  onAddAnother,
   onDone,
 }: {
   result: Result;
   rewardText: string;
   busy: boolean;
   onRedeem: () => void;
+  onAddAnother: () => void;
   onDone: () => void;
 }) {
   const { kind, name, stampsOnCard, stampsRequired, cardComplete } = result;
@@ -295,15 +301,7 @@ function ResultCard({
 
   return (
     <div className="animate-pop-in flex flex-col items-center gap-4 px-2 py-4 text-center">
-      {kind === "too_soon" ? (
-        <>
-          <Badge tone="muted">Just stamped</Badge>
-          <p className="text-sm text-brand-muted">
-            {name} was stamped moments ago, so this visit is already counted.
-          </p>
-          <StampGrid earned={stampsOnCard} required={stampsRequired} />
-        </>
-      ) : kind === "redeemed" ? (
+      {kind === "redeemed" ? (
         <>
           <Sparkle />
           <p className="text-xl font-semibold text-brand">Enjoy {rewardText}</p>
@@ -343,7 +341,7 @@ function ResultCard({
         </>
       )}
 
-      {rewardReady && (
+      {rewardReady ? (
         <div className="flex w-full gap-3 pt-1">
           <button
             type="button"
@@ -361,9 +359,7 @@ function ResultCard({
             Redeem
           </button>
         </div>
-      )}
-
-      {!rewardReady && (
+      ) : kind === "redeemed" ? (
         <button
           type="button"
           onClick={onDone}
@@ -371,26 +367,28 @@ function ResultCard({
         >
           Scan next customer
         </button>
+      ) : (
+        // A plain stamp: let staff add more for the same visit (buying for
+        // friends) or move on.
+        <div className="flex w-full gap-3 pt-1">
+          <button
+            type="button"
+            onClick={onDone}
+            className="flex-1 rounded-xl border border-brand py-3 font-medium"
+          >
+            Next customer
+          </button>
+          <button
+            type="button"
+            onClick={onAddAnother}
+            disabled={busy}
+            className="flex-1 rounded-xl bg-brand py-3 font-medium text-brand-on-primary disabled:opacity-50"
+          >
+            Add another
+          </button>
+        </div>
       )}
     </div>
-  );
-}
-
-function Badge({
-  children,
-  tone,
-}: {
-  children: React.ReactNode;
-  tone: "muted";
-}) {
-  return (
-    <span
-      className={`rounded-full px-4 py-2 text-sm font-medium ${
-        tone === "muted" ? "bg-brand-accent/15 text-brand" : ""
-      }`}
-    >
-      {children}
-    </span>
   );
 }
 
