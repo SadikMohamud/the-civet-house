@@ -182,7 +182,7 @@ export default function CardView({ userId }: CardViewProps) {
                 <QRCode value={status.card_code} size={176} />
               </div>
               <p className="mt-3 text-xs text-brand-muted">
-                Unique to you &middot; one stamp per day
+                Unique to you &middot; earn a stamp on every visit
               </p>
             </section>
           )}

@@ -6,7 +6,7 @@ import StampGrid from "@/components/StampGrid";
 import { getBrowserClient } from "@/lib/supabase/client";
 import type { CardStatus, LoyaltySettings } from "@/lib/types";
 
-type ResultKind = "stamped" | "already_today" | "complete" | "redeemed";
+type ResultKind = "stamped" | "too_soon" | "complete" | "redeemed";
 
 interface Result {
   kind: ResultKind;
@@ -103,7 +103,7 @@ export default function TillPanel({ onStampChange }: TillPanelProps) {
       // Auto-resume for the routine outcomes; wait for staff when a
       // reward is now claimable.
       if (kind === "stamped" && !data.card_complete) scheduleResume(3200);
-      else if (kind === "already_today") scheduleResume(3200);
+      else if (kind === "too_soon") scheduleResume(3200);
     },
     [onStampChange, scheduleResume]
   );
@@ -210,8 +210,8 @@ export default function TillPanel({ onStampChange }: TillPanelProps) {
               paused={paused}
             />
             <p className="px-1 text-center text-xs text-brand-muted">
-              Point at a customer&rsquo;s QR code. One stamp per day is added
-              automatically.
+              Point at a customer&rsquo;s QR code. A stamp is added
+              automatically on each visit.
             </p>
           </div>
         )}
@@ -295,11 +295,11 @@ function ResultCard({
 
   return (
     <div className="animate-pop-in flex flex-col items-center gap-4 px-2 py-4 text-center">
-      {kind === "already_today" ? (
+      {kind === "too_soon" ? (
         <>
-          <Badge tone="muted">Already stamped today</Badge>
+          <Badge tone="muted">Just stamped</Badge>
           <p className="text-sm text-brand-muted">
-            {name} has today&rsquo;s stamp. See them again tomorrow.
+            {name} was stamped moments ago, so this visit is already counted.
           </p>
           <StampGrid earned={stampsOnCard} required={stampsRequired} />
         </>
