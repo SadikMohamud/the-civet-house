@@ -161,6 +161,12 @@ export default function OwnerView() {
           >
             Staff till
           </Link>
+          <Link
+            href="/account"
+            className="text-sm text-brand-muted underline underline-offset-2 hover:text-brand"
+          >
+            Account
+          </Link>
           <SignOutButton />
         </div>
       </header>

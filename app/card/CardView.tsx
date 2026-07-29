@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import SignOutButton from "@/components/SignOutButton";
@@ -96,7 +97,15 @@ export default function CardView({ userId }: CardViewProps) {
             <p className="text-xs text-brand-muted">Loyalty card</p>
           </div>
         </div>
-        <SignOutButton />
+        <div className="flex items-center gap-4">
+          <Link
+            href="/account"
+            className="text-sm text-brand-muted underline underline-offset-2 hover:text-brand"
+          >
+            Account
+          </Link>
+          <SignOutButton />
+        </div>
       </header>
 
       {loading ? (
