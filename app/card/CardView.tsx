@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
+import Logo from "@/components/Logo";
 import SignOutButton from "@/components/SignOutButton";
 import StampGrid from "@/components/StampGrid";
 import { getBrowserClient } from "@/lib/supabase/client";
@@ -82,20 +82,9 @@ export default function CardView({ userId }: CardViewProps) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-5 py-8">
       <header className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Image
-            src={theme.logo.src}
-            alt={theme.logo.alt}
-            width={44}
-            height={44}
-            className="rounded-xl"
-          />
-          <div>
-            <h1 className="text-lg font-semibold leading-tight">
-              {theme.shopName}
-            </h1>
-            <p className="text-xs text-brand-muted">Loyalty card</p>
-          </div>
+        <div>
+          <Logo className="h-9 w-auto" priority />
+          <p className="mt-1 text-xs text-brand-muted">Loyalty card</p>
         </div>
         <div className="flex items-center gap-4">
           <Link

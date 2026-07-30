@@ -30,12 +30,14 @@ export const theme = {
   },
 
   logo: {
-    // PLACEHOLDER: replace with the real logo file
-    src: "/icons/icon.svg",
-    alt: "The Civet House logo",
+    // Real brand logo, transparent background. Intrinsic size is used by
+    // next/image; render it with a Tailwind class like "h-10 w-auto".
+    src: "/logo.png",
+    alt: "The Civet House",
+    width: 1536,
+    height: 659,
   },
 
-  // Used by the PWA manifest. Replace with real 192px and 512px PNGs
-  // when assets arrive, and update app/manifest.ts sizes accordingly.
-  pwaIcon: "/icons/icon.svg",
+  // Square app icons used by the PWA manifest, generated from the logo.
+  pwaIcon: "/icons/icon-512.png",
 } as const;

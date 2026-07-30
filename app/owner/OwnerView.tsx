@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import Logo from "@/components/Logo";
 import SignOutButton from "@/components/SignOutButton";
 import TillPanel from "@/components/TillPanel";
 import { getBrowserClient } from "@/lib/supabase/client";
-import { theme } from "@/lib/theme";
 import type { CardStatus, LoyaltySettings, Profile } from "@/lib/types";
 
 export default function OwnerView() {
@@ -149,10 +149,8 @@ export default function OwnerView() {
     <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-5 py-8">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-semibold leading-tight">
-            {theme.shopName}
-          </h1>
-          <p className="text-xs text-brand-muted">Owner dashboard</p>
+          <Logo className="h-9 w-auto" priority />
+          <p className="mt-1 text-xs text-brand-muted">Owner dashboard</p>
         </div>
         <div className="flex items-center gap-4">
           <Link

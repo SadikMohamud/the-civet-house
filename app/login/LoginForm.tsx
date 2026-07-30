@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Logo from "@/components/Logo";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { theme } from "@/lib/theme";
 
@@ -75,13 +76,7 @@ export default function LoginForm() {
   if (confirmSent) {
     return (
       <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-6 py-10 text-center">
-        <Image
-          src={theme.logo.src}
-          alt={theme.logo.alt}
-          width={72}
-          height={72}
-          className="mx-auto rounded-2xl"
-        />
+        <Logo className="mx-auto h-16 w-auto" />
         <div className="rounded-2xl bg-brand-surface p-6">
           <h1 className="text-lg font-semibold">Almost there</h1>
           <p className="mt-2 text-sm text-brand-muted">
@@ -107,15 +102,14 @@ export default function LoginForm() {
   return (
     <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-6 px-6 py-10">
       <div className="text-center">
-        <Image
-          src={theme.logo.src}
-          alt={theme.logo.alt}
-          width={72}
-          height={72}
-          className="mx-auto mb-4 rounded-2xl"
-        />
-        <h1 className="text-2xl font-semibold">{theme.shopName}</h1>
-        <p className="mt-1 text-sm text-brand-muted">{theme.tagline}</p>
+        <Link
+          href="/install"
+          className="mb-6 inline-block rounded-full bg-brand-accent/15 px-4 py-1.5 text-xs font-medium text-brand hover:bg-brand-accent/25"
+        >
+          Add this app to your phone
+        </Link>
+        <Logo className="mx-auto mb-4 h-20 w-auto" priority />
+        <p className="text-sm text-brand-muted">{theme.tagline}</p>
       </div>
 
       <div className="flex rounded-xl bg-brand-accent/15 p-1 text-sm font-medium">

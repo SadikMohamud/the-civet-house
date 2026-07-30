@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     template: `%s | ${theme.shopName}`,
   },
   description: `${theme.shopName} loyalty card. Collect stamps, earn rewards.`,
+  icons: {
+    icon: "/icons/icon-192.png",
+    apple: "/icons/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     title: theme.shopName,
