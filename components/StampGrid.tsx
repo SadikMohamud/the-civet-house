@@ -8,24 +8,20 @@ interface StampGridProps {
   tone?: "light" | "dark";
 }
 
-function CupIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 9h11v5a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" fill="currentColor" stroke="none" />
-      <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17" />
-      <path d="M9 3.5c-.5.8-.5 1.7 0 2.5M12.5 3.5c-.5.8-.5 1.7 0 2.5" />
-    </svg>
-  );
+// The civet mark (cropped from the logo) rendered as a mask so it can be
+// tinted any brand colour.
+function civetMask(color: string, size = "78%"): React.CSSProperties {
+  return {
+    WebkitMaskImage: "url(/civet.png)",
+    maskImage: "url(/civet.png)",
+    WebkitMaskRepeat: "no-repeat",
+    maskRepeat: "no-repeat",
+    WebkitMaskPosition: "center",
+    maskPosition: "center",
+    WebkitMaskSize: `${size} auto`,
+    maskSize: `${size} auto`,
+    backgroundColor: color,
+  };
 }
 
 export default function StampGrid({
@@ -48,16 +44,20 @@ export default function StampGrid({
           <div
             key={i}
             aria-label={filled ? "Stamp earned" : "Stamp not yet earned"}
-            className={`flex h-11 w-11 items-center justify-center rounded-full border transition-colors duration-300 ${
+            className={`flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border transition-colors duration-300 ${
               filled
-                ? `border-transparent bg-brand-accent text-brand shadow-[0_2px_8px_rgba(0,0,0,0.18)] ${
+                ? `border-transparent bg-brand-accent shadow-[0_2px_8px_rgba(0,0,0,0.18)] ${
                     isLast && animateLast ? "animate-stamp-pop" : ""
                   }`
                 : `${emptyBorder} ${emptyBg} ${emptyText}`
             }`}
           >
             {filled ? (
-              <CupIcon />
+              <span
+                aria-hidden="true"
+                className="h-full w-full"
+                style={civetMask("var(--brand-primary)")}
+              />
             ) : (
               <span className="text-sm font-medium">{i + 1}</span>
             )}

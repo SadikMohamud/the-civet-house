@@ -324,8 +324,22 @@ function ResultCard({
         </>
       ) : (
         <>
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-accent/20 text-brand">
-            <CupBig />
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-accent/20">
+            <span
+              aria-hidden="true"
+              className="h-9 w-9"
+              style={{
+                WebkitMaskImage: "url(/civet.png)",
+                maskImage: "url(/civet.png)",
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskPosition: "center",
+                maskPosition: "center",
+                WebkitMaskSize: "contain",
+                maskSize: "contain",
+                backgroundColor: "var(--brand-primary)",
+              }}
+            />
           </div>
           <div>
             <p className="text-lg font-semibold">Stamp added</p>
@@ -410,22 +424,3 @@ function Sparkle() {
   );
 }
 
-function CupBig() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6 9h11v5a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z" fill="currentColor" stroke="none" />
-      <path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17" />
-      <path d="M9 3.5c-.5.8-.5 1.7 0 2.5M12.5 3.5c-.5.8-.5 1.7 0 2.5" />
-    </svg>
-  );
-}

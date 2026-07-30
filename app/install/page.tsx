@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "@/components/Footer";
 import Logo from "@/components/Logo";
 import InstallGuide from "./InstallGuide";
 
@@ -29,6 +30,7 @@ export default function InstallPage() {
       </div>
 
       <InstallGuide />
+      <Footer />
     </div>
   );
 }

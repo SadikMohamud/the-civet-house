@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import BottomNav from "@/components/BottomNav";
 import Logo from "@/components/Logo";
 import SignOutButton from "@/components/SignOutButton";
 import TillPanel from "@/components/TillPanel";
@@ -146,27 +146,14 @@ export default function OwnerView() {
     "w-full rounded-xl border border-brand-accent/40 px-4 py-2.5 text-sm outline-none focus:border-brand-accent";
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-5 py-8">
+    <>
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-5 px-5 pb-28 pt-8">
       <header className="flex items-center justify-between">
         <div>
           <Logo className="h-9 w-auto" priority />
           <p className="mt-1 text-xs text-brand-muted">Owner dashboard</p>
         </div>
-        <div className="flex items-center gap-4">
-          <Link
-            href="/staff"
-            className="text-sm text-brand-muted underline underline-offset-2 hover:text-brand"
-          >
-            Staff till
-          </Link>
-          <Link
-            href="/account"
-            className="text-sm text-brand-muted underline underline-offset-2 hover:text-brand"
-          >
-            Account
-          </Link>
-          <SignOutButton />
-        </div>
+        <SignOutButton />
       </header>
 
       {loading ? (
@@ -359,6 +346,8 @@ export default function OwnerView() {
           {error}
         </p>
       )}
-    </div>
+      </div>
+      <BottomNav role="owner" />
+    </>
   );
 }

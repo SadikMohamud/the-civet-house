@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { theme } from "@/lib/theme";
-import Footer from "@/components/Footer";
+import LoadingScreen from "@/components/LoadingScreen";
 import SwRegister from "@/components/SwRegister";
 
 const geistSans = Geist({
@@ -60,6 +60,7 @@ export default function RootLayout({
       {/* 100dvh tracks the real visible height as mobile browser chrome
           shows and hides, so the footer never sits under the URL bar. */}
       <body className="flex min-h-[100dvh] flex-col">
+        <LoadingScreen />
         <SwRegister />
         <main
           className="flex flex-1 flex-col"
@@ -71,7 +72,6 @@ export default function RootLayout({
         >
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );

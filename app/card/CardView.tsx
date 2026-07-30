@@ -3,18 +3,21 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
+import AppBackground from "@/components/AppBackground";
+import BottomNav from "@/components/BottomNav";
 import Logo from "@/components/Logo";
 import SignOutButton from "@/components/SignOutButton";
 import StampGrid from "@/components/StampGrid";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { theme } from "@/lib/theme";
-import type { CardStatus, LoyaltySettings } from "@/lib/types";
+import type { CardStatus, LoyaltySettings, Role } from "@/lib/types";
 
 interface CardViewProps {
   userId: string;
+  role: Role;
 }
 
-export default function CardView({ userId }: CardViewProps) {
+export default function CardView({ userId, role }: CardViewProps) {
   const [settings, setSettings] = useState<LoyaltySettings | null>(null);
   const [status, setStatus] = useState<CardStatus | null>(null);
   const [loading, setLoading] = useState(true);
@@ -80,7 +83,9 @@ export default function CardView({ userId }: CardViewProps) {
   const remaining = Math.max(required - earned, 0);
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-5 py-8">
+    <>
+      <AppBackground src="/img/hero-coffee.jpg" from={0.86} to={0.99} />
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-5 pb-28 pt-8">
       <header className="flex items-center justify-between">
         <div>
           <Logo className="h-9 w-auto" priority />
@@ -194,6 +199,8 @@ export default function CardView({ userId }: CardViewProps) {
           )}
         </>
       )}
-    </div>
+      </div>
+      <BottomNav role={role} />
+    </>
   );
 }

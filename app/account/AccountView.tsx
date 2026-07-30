@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import BottomNav from "@/components/BottomNav";
+import Footer from "@/components/Footer";
 import SignOutButton from "@/components/SignOutButton";
 import { getBrowserClient } from "@/lib/supabase/client";
 import { theme } from "@/lib/theme";
@@ -57,7 +59,8 @@ export default function AccountView({ email, role }: AccountViewProps) {
   const dest = home[role];
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-5 py-8">
+    <>
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 px-5 pb-28 pt-8">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-lg font-semibold leading-tight">
@@ -128,6 +131,10 @@ export default function AccountView({ email, role }: AccountViewProps) {
       <div className="text-center">
         <SignOutButton />
       </div>
-    </div>
+
+      <Footer />
+      </div>
+      <BottomNav role={role} />
+    </>
   );
 }
