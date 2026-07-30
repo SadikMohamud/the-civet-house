@@ -84,7 +84,7 @@ export default function InstallGuide() {
       {platform === "ios" && (
         <p className="rounded-xl bg-brand-accent/10 px-4 py-3 text-center text-xs text-brand-muted">
           On iPhone this only works in <strong>Safari</strong>. If you are in
-          another browser, open thecivethouse.vercel.app in Safari first.
+          another browser, open the-civet-house.vercel.app in Safari first.
         </p>
       )}
     </div>
